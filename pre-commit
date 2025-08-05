@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo "Ejecutando el hook pre-commit para Java..."
+
+# Ejecuta el ciclo de vida de prueba de Maven
+# mvn test compila el código, ejecuta las pruebas y se detiene si hay errores.
+# -DskipTests es una opción que te permite saltar las pruebas si es necesario.
+echo "Iniciando el ciclo de vida 'test' de Maven..."
+mvn test
+
+# Comprueba el código de salida del comando anterior
+if [ $? -ne 0 ]; then
+  echo "--------------------------------------------------------"
+  echo "❌ ¡ERROR! Las pruebas de Maven fallaron."
+  echo "El commit ha sido cancelado para evitar enviar código roto."
+  echo "--------------------------------------------------------"
+  exit 1
+fi
+
+echo "--------------------------------------------------------"
+echo "✅ El hook pre-commit se ejecutó correctamente."
+echo "--------------------------------------------------------"
+exit 0
